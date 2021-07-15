@@ -13,7 +13,7 @@ Example 1:
 ### The Algorithm
 
 The key to answer this question is to realize the importance of the restrictions proposed by the NOTE. 
-Notice that **if no element cannot be larger than the length of the array, it is always possible to index this array using any given element.**
+Notice that **if no element can be larger than the length of the array, it is always possible to index this array using any given element.**
 
 Example 2:
 Suppose we have an array (of length `5`), `arr = [2, 3, 4, 1, 3]`
