@@ -1,6 +1,8 @@
 # Kadane's Algorithm 
 Time Complexity: O(n)
 
+Used to find the maximum sum of a contiguous subarray within an array of integers. For `maximum_sum([-2, 1, -3, 4, -1, 2, 1, -5, 4])`, the expected result is: `6`, which comes from the subarray `[4, -1, 2, 1]`.
+
 NOTE: For this problem, the smallest possible maximum sum is ZERO,
 as we also consider the empty subarray ([], or the 'empty array'), which has a sum of `0` (empty sum).
 
