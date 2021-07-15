@@ -65,6 +65,7 @@ UNTIL we reach a element whose value is enough to turn the sum positive again.
 then we can update the maximum sum value to the current sum.
 
 ```py
+def get_maximum_sum(arr):
     # Smallest possible maximum sum is 0
     # and obviously, our current sum starts at 0
     max = 0
