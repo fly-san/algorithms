@@ -75,7 +75,7 @@ So, for example, let's go through the array from Example 2 (shortened version he
 ```py
 def find_first_dup(arr):
     for i in range(len(arr)):
-        fut = abs(arr[i]) # The value indexed at i, which we will use as our operation index
+        fut = abs(arr[i]) - 1 # The value indexed at i, which we will use as our operation index
 
         if arr[fut] < 0:
             return i
