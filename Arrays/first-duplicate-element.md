@@ -60,19 +60,25 @@ So, for example, let's go through the array from Example 2 (shortened version he
 
 2) At position `2`, we find an element with value `-4`.
 
-  - Since this value is negative, we return it, as it is the first duplicated value we encountered. 
-  - Return the current position.
+  - Since this element is negative, we take its absolute value (which is `4`) and use it as index. 
+  - At position `4`, we have the element `3`, we flip it to `-3`.
+  
+| Value | 3 | -4 | -3 | 
+| --- | --- | --- | --- |
+| Index | 1 | 2 | 4 | 
 
+3) At position `4`, we have the element `-3`. We take its absolute value (`3`) and 
+  - at position `3`, we find a negative value (`-4`).
+  - This is our first duplicate, as it is the first negative value we found while indexing.
+  - Return the current position `4`. WARNING: This is the position of the element `-3`, not the negative value!
 
 ```py
-def find_first_duplicate(arr):
+def find_first_dup(arr):
     for i in range(len(arr)):
+        fut = abs(arr[i]) # The value indexed at i, which we will use as our operation index
 
-        # Case 2
-        if arr[i] < 0:
+        if arr[fut] < 0:
             return i
-
-        # Case 1
-        absolute_i = abs(arr[i]) 
-        arr[i] = - arr[i]
+        
+        arr[fut] = - arr[fut]
 ```
