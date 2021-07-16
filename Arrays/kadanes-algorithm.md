@@ -16,6 +16,7 @@ max(-2, 0) = 0
 
 ### The Algorithm
 
+Remember: we do not want to find the subarray! We want to find the highest possible sum.
 
 The main idea is very simple: given the sum of three positive integers `a`, `b`, `c`, we have
 
@@ -47,7 +48,17 @@ As such, the sum of `[-2, 1, 3]` will NEVER be greater than the sum of `[1, 3]`
 What does this mean, in practice?
 
 (ii.) The maximum possible sum will never contain a negative element, unless it is counterbalanced
-by another positive element, greater or equal to its negative equivalent
+by another positive element, greater or equal to its negative equivalent.
+
+So, for example:
+
+The array `[4, -1, 2, 1]` is of form `[+a, -c, +b, +c]`. Notice that the highest sum `a + b + c` is not possible, 
+as it is not contiguous. To sum `+a`, `+b`, and `+c` together, we must do `a - c + b + c`, but that
+actually leaves us with a smaller sum than `a + b + c`, which is namely `a + b`.
+
+This is a very special case, as it is slightly counterintuitive: to obtain the highest possible sum `4 + 2`, we must first
+counterbalance `-1`, whos between `4` and `2` with `+1`, which comes after `2`.
+
 
 Example 2 (taken from kata):
 
@@ -56,12 +67,12 @@ Example 2 (taken from kata):
 ```
 
 From (ii.), its possible to infer `[-2, 1]` will never be part of the maximum sum, 
-unless theres another element ahead which counterbalance its current sum!    
+unless theres another element ahead which counterbalances its current sum!    
 
 CONCLUSION: 
 
 (a) In other words, if the current sum is negative `(cs < 0)`, this element carries NO WEIGHT
-UNTIL we reach a element whose value is enough to turn the sum positive again.
+UNTIL we reach a element whose value is enough to turn the sum positive again. 
 
 (b) If the current sum is greater than the last maximum sum (see NOTE),
 then we can update the maximum sum value to the current sum.
@@ -86,3 +97,24 @@ def get_maximum_sum(arr):
             
     return max
 ```
+
+Here's a step-by-step breakdown of what happens with each variable, according to the Example 2:
+
+```
+[-2,  1, -3,  4, -1,  2,  1, -5,  4]
+```
+
+| i | current_sum (max) + (i) | max (c_s > max)|
+| --- | --- | --- |
+| -2 | 0 + (-2) = -2 | 0 | 
+| 1 | 0 + 1 | 1 |
+| -3 | 1 + (-3) = -2 | 0 |
+| 4 | 0 + 4 = 4 | 4 |
+| -1 | 4 + (-1) = 3 | 4 |
+| 2 | 3 + 2 = 5 | 5 |
+| 1 | 5 + 1 = 6 | 6 |
+| -5 | 6 + (-5) = 1 | 6 |
+| 4 | 1 + 4 = 5 | 6 |
+
+The subarray is `[4, -1, 2, 1]`, but the objective was never to find the subarray, we simply had to find
+the maximum sum, which we did `(6)`.
