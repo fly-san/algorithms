@@ -29,8 +29,8 @@ However, notice that this also happens for the second element with a value of `3
 
 (i.) It's trivial, then, to realize that for every element with the same value, if we index the array at said value, we will always get the same element.
 
-**Warning:** please beware that in reality, we need to use `value - 1` to find the proper index. 
-Since if we have an element with the same value as the length of the array, we will not be able to index it. 
+**Warning:** please beware that in reality, we need to use `|value| - 1` to find the proper index. We first get the absolute value, as the value could be negative.
+But, if we had an element with the same value as the length of the array, we would not be able to index it, as it would excede the length. 
 In the example above, it'd be impossible to index an element of value `4` (as there are no elements at index 4), 
 despite `4` being a completely valid element according to our rules.
 
@@ -40,45 +40,64 @@ Since the problem asks us to identify only duplicate items, using the principle 
 we can "store" numbers which we've previously seen by flipping their signals to ngeative. In other words, if a number is positive, we make it negative. 
 The first time we encounter a "flipped" number (negative), it necessarily already have appeared before, and, thus, will be a duplicated. 
 
-| Value | 3 | 4 | 3 | 
-| --- | --- | --- | --- |
-| Index | 1 | 2 | 4 | 
-
-So, for example, let's go through the array from Example 2 (shortened version here):
-
-1) At position `1`, we find an element with value `3`. 
-  We apply our formula (see warning), `result_index = value - 1`, and get `result_index = 2`.
-
-  - At position `2`, we find the value `4`. We then flip the value `4` to `-4`. The array now looks like this
-
-
-| Value | 3 | -4 | 3 | 
-| --- | --- | --- | --- |
-| Index | 1 | 2 | 4 | 
-
-  - We continue to the next position.
-
-2) At position `2`, we find an element with value `-4`.
-
-  - Since this element is negative, we take its absolute value (which is `4`) and use it as index. 
-  - At position `4`, we have the element `3`, we flip it to `-3`.
-  
-| Value | 3 | -4 | -3 | 
-| --- | --- | --- | --- |
-| Index | 1 | 2 | 4 | 
-
-3) At position `4`, we have the element `-3`. We take its absolute value (`3`) and 
-  - at position `3`, we find a negative value (`-4`).
-  - This is our first duplicate, as it is the first negative value we found while indexing.
-  - Return the current position `4`. WARNING: This is the position of the element `-3`, not the negative value!
 
 ```py
 def find_first_dup(arr):
     for i in range(len(arr)):
-        fut = abs(arr[i]) - 1 # The value indexed at i, which we will use as our operation index
+        # Stage 1
+        # Retrieve the operation value, which we can obtain by getting the element indexed at i, and applying our formula
+        index_from_value = abs(arr[i]) - 1 
 
-        if arr[fut] < 0:
+        # Stage 2
+        if arr[index_from_value] < 0:
             return i
         
-        arr[fut] = - arr[fut]
+        # Stage 3
+        arr[index_from_value] = - arr[index_from_value]
 ```
+
+So, for example, let's go through the array from Example 2 (shortened version here):
+
+
+| Value | 2 | 3 | 4 | 1 | 3 | 
+| --- | --- | --- | --- | --- | --- |
+| Index | 0 | 1 | 2 | 3 | 4 |
+
+We start at `i = 0`, from where we obtain an "operation index" (`index_from_value = 1`), by applying the formula `|val| - 1`.
+   * At `arr[index_from_value]`, we check to see if the value is negative. 
+    Since `arr[1] = 3`, we turn it into `-3`.
+
+| Value | 2 | [-3] | 4 | 1 | 3 | 
+| --- | --- | --- | --- | --- | --- |
+| Index | >0< | 1 | 2 | 3 | 4 |
+
+We continue to `i = 1`, where we get (`index_from_value = 2`), by applying the formula `|3| - 1`.
+    Since `arr[2] = 4`, we turn it into `-4`.
+
+| Value | 2 | -3 | [-4] | 1 | 3 | 
+| --- | --- | --- | --- | --- | --- |
+| Index | 0 | >1< | 2 | 3 | 4 |
+
+In `i = 2`, we get (`index_from_value = 3`) from `|4| - 1`.
+    Since `arr[3] = 1`, we turn it into `-1`.
+
+| Value | 2 | -3 | -4 | [-1] | 3 | 
+| --- | --- | --- | --- | --- | --- |
+| Index | 0 | 1 | >2< | 3 | 4 |
+
+In `i = 3`, we get (`index_from_value = 0`) from `|1| - 1`.
+    Since `arr[0] = 2`, we turn it into `-2`.
+
+
+| Value | [-2] | -3 | -4 | -1 | 3 | 
+| --- | --- | --- | --- | --- | --- |
+| Index | 0 | 1 | 2 | >3< | 4 |
+
+In `i = 4`, we get (`index_from_value = 2`) from `|3| - 1`
+    But wait, `arr[2] = -4`. This is a negative number, which means we already saw it before!
+    Since `arr[2]` is negative, we return the current index `i = 4`
+
+
+| Value | -2 | -3 | [-4] | -1 | 3 | 
+| --- | --- | --- | --- | --- | --- |
+| Index | 0 | 1 | 2 | 3 | >4< |
